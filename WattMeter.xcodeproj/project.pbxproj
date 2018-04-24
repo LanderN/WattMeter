@@ -1,0 +1,574 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2485C8F6208FA6BC0035DD38 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2485C8F5208FA6BC0035DD38 /* AppDelegate.swift */; };
+		2485C8F8208FA6BC0035DD38 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2485C8F7208FA6BC0035DD38 /* ViewController.swift */; };
+		2485C8FA208FA6BE0035DD38 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2485C8F9208FA6BE0035DD38 /* Assets.xcassets */; };
+		2485C8FD208FA6BE0035DD38 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2485C8FB208FA6BE0035DD38 /* Main.storyboard */; };
+		2485C909208FA6BE0035DD38 /* WattMeterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2485C908208FA6BE0035DD38 /* WattMeterTests.swift */; };
+		2485C914208FA6BE0035DD38 /* WattMeterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2485C913208FA6BE0035DD38 /* WattMeterUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2485C905208FA6BE0035DD38 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2485C8EA208FA6BC0035DD38 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2485C8F1208FA6BC0035DD38;
+			remoteInfo = WattMeter;
+		};
+		2485C910208FA6BE0035DD38 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2485C8EA208FA6BC0035DD38 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2485C8F1208FA6BC0035DD38;
+			remoteInfo = WattMeter;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		2485C8F2208FA6BC0035DD38 /* WattMeter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WattMeter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2485C8F5208FA6BC0035DD38 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		2485C8F7208FA6BC0035DD38 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		2485C8F9208FA6BE0035DD38 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2485C8FC208FA6BE0035DD38 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		2485C8FE208FA6BE0035DD38 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2485C8FF208FA6BE0035DD38 /* WattMeter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WattMeter.entitlements; sourceTree = "<group>"; };
+		2485C904208FA6BE0035DD38 /* WattMeterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WattMeterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2485C908208FA6BE0035DD38 /* WattMeterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WattMeterTests.swift; sourceTree = "<group>"; };
+		2485C90A208FA6BE0035DD38 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2485C90F208FA6BE0035DD38 /* WattMeterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WattMeterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2485C913208FA6BE0035DD38 /* WattMeterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WattMeterUITests.swift; sourceTree = "<group>"; };
+		2485C915208FA6BE0035DD38 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2485C8EF208FA6BC0035DD38 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2485C901208FA6BE0035DD38 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2485C90C208FA6BE0035DD38 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2485C8E9208FA6BC0035DD38 = {
+			isa = PBXGroup;
+			children = (
+				2485C8F4208FA6BC0035DD38 /* WattMeter */,
+				2485C907208FA6BE0035DD38 /* WattMeterTests */,
+				2485C912208FA6BE0035DD38 /* WattMeterUITests */,
+				2485C8F3208FA6BC0035DD38 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2485C8F3208FA6BC0035DD38 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2485C8F2208FA6BC0035DD38 /* WattMeter.app */,
+				2485C904208FA6BE0035DD38 /* WattMeterTests.xctest */,
+				2485C90F208FA6BE0035DD38 /* WattMeterUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2485C8F4208FA6BC0035DD38 /* WattMeter */ = {
+			isa = PBXGroup;
+			children = (
+				2485C8F5208FA6BC0035DD38 /* AppDelegate.swift */,
+				2485C8F7208FA6BC0035DD38 /* ViewController.swift */,
+				2485C8F9208FA6BE0035DD38 /* Assets.xcassets */,
+				2485C8FB208FA6BE0035DD38 /* Main.storyboard */,
+				2485C8FE208FA6BE0035DD38 /* Info.plist */,
+				2485C8FF208FA6BE0035DD38 /* WattMeter.entitlements */,
+			);
+			path = WattMeter;
+			sourceTree = "<group>";
+		};
+		2485C907208FA6BE0035DD38 /* WattMeterTests */ = {
+			isa = PBXGroup;
+			children = (
+				2485C908208FA6BE0035DD38 /* WattMeterTests.swift */,
+				2485C90A208FA6BE0035DD38 /* Info.plist */,
+			);
+			path = WattMeterTests;
+			sourceTree = "<group>";
+		};
+		2485C912208FA6BE0035DD38 /* WattMeterUITests */ = {
+			isa = PBXGroup;
+			children = (
+				2485C913208FA6BE0035DD38 /* WattMeterUITests.swift */,
+				2485C915208FA6BE0035DD38 /* Info.plist */,
+			);
+			path = WattMeterUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2485C8F1208FA6BC0035DD38 /* WattMeter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2485C918208FA6BE0035DD38 /* Build configuration list for PBXNativeTarget "WattMeter" */;
+			buildPhases = (
+				2485C8EE208FA6BC0035DD38 /* Sources */,
+				2485C8EF208FA6BC0035DD38 /* Frameworks */,
+				2485C8F0208FA6BC0035DD38 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WattMeter;
+			productName = WattMeter;
+			productReference = 2485C8F2208FA6BC0035DD38 /* WattMeter.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2485C903208FA6BE0035DD38 /* WattMeterTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2485C91B208FA6BE0035DD38 /* Build configuration list for PBXNativeTarget "WattMeterTests" */;
+			buildPhases = (
+				2485C900208FA6BE0035DD38 /* Sources */,
+				2485C901208FA6BE0035DD38 /* Frameworks */,
+				2485C902208FA6BE0035DD38 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2485C906208FA6BE0035DD38 /* PBXTargetDependency */,
+			);
+			name = WattMeterTests;
+			productName = WattMeterTests;
+			productReference = 2485C904208FA6BE0035DD38 /* WattMeterTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		2485C90E208FA6BE0035DD38 /* WattMeterUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2485C91E208FA6BE0035DD38 /* Build configuration list for PBXNativeTarget "WattMeterUITests" */;
+			buildPhases = (
+				2485C90B208FA6BE0035DD38 /* Sources */,
+				2485C90C208FA6BE0035DD38 /* Frameworks */,
+				2485C90D208FA6BE0035DD38 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2485C911208FA6BE0035DD38 /* PBXTargetDependency */,
+			);
+			name = WattMeterUITests;
+			productName = WattMeterUITests;
+			productReference = 2485C90F208FA6BE0035DD38 /* WattMeterUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2485C8EA208FA6BC0035DD38 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0930;
+				LastUpgradeCheck = 0930;
+				ORGANIZATIONNAME = "Lander Noterman";
+				TargetAttributes = {
+					2485C8F1208FA6BC0035DD38 = {
+						CreatedOnToolsVersion = 9.3;
+					};
+					2485C903208FA6BE0035DD38 = {
+						CreatedOnToolsVersion = 9.3;
+						TestTargetID = 2485C8F1208FA6BC0035DD38;
+					};
+					2485C90E208FA6BE0035DD38 = {
+						CreatedOnToolsVersion = 9.3;
+						TestTargetID = 2485C8F1208FA6BC0035DD38;
+					};
+				};
+			};
+			buildConfigurationList = 2485C8ED208FA6BC0035DD38 /* Build configuration list for PBXProject "WattMeter" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 2485C8E9208FA6BC0035DD38;
+			productRefGroup = 2485C8F3208FA6BC0035DD38 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2485C8F1208FA6BC0035DD38 /* WattMeter */,
+				2485C903208FA6BE0035DD38 /* WattMeterTests */,
+				2485C90E208FA6BE0035DD38 /* WattMeterUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2485C8F0208FA6BC0035DD38 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2485C8FA208FA6BE0035DD38 /* Assets.xcassets in Resources */,
+				2485C8FD208FA6BE0035DD38 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2485C902208FA6BE0035DD38 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2485C90D208FA6BE0035DD38 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2485C8EE208FA6BC0035DD38 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2485C8F8208FA6BC0035DD38 /* ViewController.swift in Sources */,
+				2485C8F6208FA6BC0035DD38 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2485C900208FA6BE0035DD38 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2485C909208FA6BE0035DD38 /* WattMeterTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2485C90B208FA6BE0035DD38 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2485C914208FA6BE0035DD38 /* WattMeterUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2485C906208FA6BE0035DD38 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2485C8F1208FA6BC0035DD38 /* WattMeter */;
+			targetProxy = 2485C905208FA6BE0035DD38 /* PBXContainerItemProxy */;
+		};
+		2485C911208FA6BE0035DD38 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2485C8F1208FA6BC0035DD38 /* WattMeter */;
+			targetProxy = 2485C910208FA6BE0035DD38 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		2485C8FB208FA6BE0035DD38 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2485C8FC208FA6BE0035DD38 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		2485C916208FA6BE0035DD38 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		2485C917208FA6BE0035DD38 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		2485C919208FA6BE0035DD38 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = WattMeter/WattMeter.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = WattMeter/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = noterman.lander.WattMeter;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		2485C91A208FA6BE0035DD38 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = WattMeter/WattMeter.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = WattMeter/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = noterman.lander.WattMeter;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+		2485C91C208FA6BE0035DD38 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = WattMeterTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = noterman.lander.WattMeterTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WattMeter.app/Contents/MacOS/WattMeter";
+			};
+			name = Debug;
+		};
+		2485C91D208FA6BE0035DD38 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = WattMeterTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = noterman.lander.WattMeterTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WattMeter.app/Contents/MacOS/WattMeter";
+			};
+			name = Release;
+		};
+		2485C91F208FA6BE0035DD38 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = WattMeterUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = noterman.lander.WattMeterUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TEST_TARGET_NAME = WattMeter;
+			};
+			name = Debug;
+		};
+		2485C920208FA6BE0035DD38 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = WattMeterUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = noterman.lander.WattMeterUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TEST_TARGET_NAME = WattMeter;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2485C8ED208FA6BC0035DD38 /* Build configuration list for PBXProject "WattMeter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2485C916208FA6BE0035DD38 /* Debug */,
+				2485C917208FA6BE0035DD38 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2485C918208FA6BE0035DD38 /* Build configuration list for PBXNativeTarget "WattMeter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2485C919208FA6BE0035DD38 /* Debug */,
+				2485C91A208FA6BE0035DD38 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2485C91B208FA6BE0035DD38 /* Build configuration list for PBXNativeTarget "WattMeterTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2485C91C208FA6BE0035DD38 /* Debug */,
+				2485C91D208FA6BE0035DD38 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2485C91E208FA6BE0035DD38 /* Build configuration list for PBXNativeTarget "WattMeterUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2485C91F208FA6BE0035DD38 /* Debug */,
+				2485C920208FA6BE0035DD38 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2485C8EA208FA6BC0035DD38 /* Project object */;
+}
