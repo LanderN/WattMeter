@@ -82,6 +82,7 @@ let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variable
         let result1 = resultArray![1] as! NSDictionary
         let items1 = result1.value(forKey: "_items") as! NSArray
         let machine_info = items1[0] as! NSDictionary
+        
         // TODO: Get more reliable way of selecting model?
         let model = machine_info.value(forKey: "machine_name") as! String
         let cores = Int(machine_info.value(forKey: "number_processors") as! Int)
@@ -93,12 +94,7 @@ let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variable
                 iconText += "⚡️"
             }
         else {
-            let machine = [
-                "model": model,
-                "cores": cores,
-                "current_watt": current_watt
-                ] as [String : Any]
-            let impact = get_impact(machine: machine)
+            let impact = get_impact(model: model, cores: cores, watt: Int(current_watt)!)
             var color = NSColor(rgb:0xDD8000)
             if impact == "low"{
             color = NSColor(rgb:0x3D9140)
@@ -125,7 +121,7 @@ let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variable
         }
     }
     
-    func get_impact(machine: Dictionary<String, Any>) -> String{
+    func get_impact(model: String, cores: Int, watt: Int) -> String{
         // TODO: Update this to reflect all available models
         // TODO: Add fallback for unrecognized Macs
         // TODO: Make configurable in settings, with reasonable defaults for detected model
@@ -150,19 +146,16 @@ let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variable
         ]
         
         // TODO: Clean up this mess
-        let model = machine["model"] as! String
-        let cores = machine["cores"] as! Int
-        let watt = Int(machine["current_watt"] as! String)
         let low = IMPACT[cores]![model]!["low"]
         let medium = IMPACT[cores]![model]!["medium"]
         let high = IMPACT[cores]![model]!["high"]
-        if watt! <= low!{
+        if watt <= low!{
             return "low"
         }
-        if watt! <= medium!{
+        if watt <= medium!{
             return "medium"
         }
-        if watt! >= high!{
+        if watt >= high!{
             return "high"
         }
         return "mid"
