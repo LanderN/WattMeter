@@ -8,6 +8,8 @@
 
 import Cocoa
 import Foundation
+import IOKit.ps
+import IOKit.pwr_mgt
 
 
 // Copied from StackOverflow
@@ -33,90 +35,92 @@ extension NSColor {
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     var updateTimer:Timer!
-let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+    let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
     @objc func updateIcon() {
         var attribute = [:] as [NSAttributedStringKey: Any]
         var iconText = ""
         
-        // TODO: Split this off into other method
-        // Create a Task instance
-        let task = Process()
-        
-        // Set the task parameters
-        task.launchPath = "/usr/sbin/system_profiler"
-        task.arguments = ["-xml", "SPPowerDataType", "SPHardwareDataType"]
-        
-        // Create a Pipe and make the task
-        // put all the output there
-        let pipe = Pipe()
-        task.standardOutput = pipe
-        
-        // Launch the task
-        task.launch()
-        
-        
-        // Get the data
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let path = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("WattInfo")
-        do {
-            try data.write(to: path, options: .atomic)
-        } catch {
-            // TODO: error handling
-            print(error)
-        }
-        
-        // TODO: Write a better way of retrieving values
-        let resultArray = NSArray(contentsOf: path)
-        
-        let result = resultArray![0] as! NSDictionary
-        let items = result.value(forKey: "_items") as! NSArray
-        let spbattery_info = items[0] as! NSDictionary
-        let spac_info = items[1] as! NSDictionary
-        let spac_info2 = items[3] as! NSDictionary
-        
-        let current_amperage = spbattery_info.value(forKey: "sppower_current_amperage") as! Int
-        let current_voltage = spbattery_info.value(forKey: "sppower_current_voltage") as! Int
-        var current_watt = String(abs(current_voltage / 1000 * current_amperage / 1000))
-        
-        let result1 = resultArray![1] as! NSDictionary
-        let items1 = result1.value(forKey: "_items") as! NSArray
-        let machine_info = items1[0] as! NSDictionary
-        
-        // TODO: Get more reliable way of selecting model?
-        let model = machine_info.value(forKey: "machine_name") as! String
-        let cores = Int(machine_info.value(forKey: "number_processors") as! Int)
-        
-
-        if let ac = spac_info.value(forKey: "AC Power") as! NSDictionary? {
-            if ac.value(forKey: "Current Power Source") != nil {
-                current_watt = spac_info2.value(forKey: "sppower_ac_charger_watts") as! String
+        var watts = 0
+        let psInfo = IOPSCopyPowerSourcesInfo().takeRetainedValue()
+        let powerSource = IOPSGetProvidingPowerSourceType(psInfo).takeRetainedValue() as String
+        if powerSource == kIOPMACPowerKey {
+            let acInfo = IOPSCopyExternalPowerAdapterDetails().takeRetainedValue() as CFTypeRef
+            if let acWatts = (acInfo[kIOPSPowerAdapterWattsKey] as? Int) {
+                watts = acWatts
                 iconText += "⚡️"
             }
-        else {
-            let impact = get_impact(model: model, cores: cores, watt: Int(current_watt)!)
+        } else if powerSource == kIOPMBatteryPowerKey {
+            var voltage = 0
+            var current = 0
+            
+            // OMG, kill me now
+            var kernResult: kern_return_t?
+            let tmp: UnsafeMutablePointer<Unmanaged<CFArray>?> = UnsafeMutablePointer.allocate(capacity: MemoryLayout<Unmanaged<CFArray>?>.size)
+            let masterPort: UnsafeMutablePointer<mach_port_t> = UnsafeMutablePointer.allocate(capacity: MemoryLayout<mach_port_t>.size)
+            kernResult = IOMasterPort(mach_port_t(MACH_PORT_NULL), masterPort)
+            if KERN_SUCCESS != kernResult {
+                print("Something went wrong.")
+            } else {
+                IOPMCopyBatteryInfo(mach_port_t(MACH_PORT_NULL), tmp)
+                let array:CFArray = (tmp.pointee?.takeRetainedValue())!
+                let count = CFArrayGetCount(array)
+                if count > 0 {
+                    let pointer = CFArrayGetValueAtIndex(array, 0)
+                    let pmBattery:Dictionary<String, Any> = unsafeBitCast(pointer, to: CFDictionary.self) as! Dictionary
+                    voltage = pmBattery[kIOBatteryVoltageKey] as! Int
+                    current = pmBattery[kIOBatteryAmperageKey] as! Int
+                }
+            }
+            
+            /*
+            // This is a better way to get above info, but unfortunately doesn't work for voltage for some reason
+            let psList = IOPSCopyPowerSourcesList(psInfo).takeRetainedValue() as [CFTypeRef]
+            for ps in psList {
+                let psDesc2 = IOPSGetPowerSourceDescription(psInfo, ps)
+                if let psDesc = IOPSGetPowerSourceDescription(psInfo, ps).takeUnretainedValue() as? [String: Any] {
+                    if let battVoltage = (psDesc[kIOPSVoltageKey] as? Int) {
+                        print("Voltage:", battVoltage)
+                        voltage = battVoltage
+                    }
+                    if let battCurrent = (psDesc[kIOPSCurrentKey] as? Int) {
+                        print("Current:", battCurrent)
+                        current = battCurrent
+                    }
+                    
+                }
+            }
+            */
+            
+            watts = abs(voltage / 1000 * current / 1000)
+            
+            // TODO: Get more reliable way of selecting model?
+            let model = "MacBook Pro"
+            let cores = 4
+            
+            
+            let impact = get_impact(model: model, cores: cores, watt: watts)
             var color = NSColor(rgb:0xDD8000)
             if impact == "low"{
-            color = NSColor(rgb:0x3D9140)
+                color = NSColor(rgb:0x3D9140)
             }
             if impact == "medium"{
-            color = NSColor(rgb:0x7b917b)
+                color = NSColor(rgb:0x7b917b)
             }
             if impact == "high"{
-            color = NSColor(rgb:0xff0000)
+                color = NSColor(rgb:0xff0000)
             }
             if impact == "high"{
-            iconText += "⚠ "
+                iconText += "⚠ "
             }
             
             attribute[NSAttributedStringKey.foregroundColor] = color
-        }
         }
         
         attribute[NSAttributedStringKey.font] = NSFont(name: "Helvetica", size: 10)
         
         if let button = statusItem.button {
-            iconText += current_watt + "W"
+            iconText += String(watts) + "W"
             button.attributedTitle = NSAttributedString(string: iconText, attributes: attribute)
         }
     }
