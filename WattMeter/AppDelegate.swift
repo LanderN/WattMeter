@@ -146,17 +146,18 @@ let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variable
         ]
         
         // TODO: Clean up this mess
-        let low = IMPACT[cores]![model]!["low"]
-        let medium = IMPACT[cores]![model]!["medium"]
-        let high = IMPACT[cores]![model]!["high"]
-        if watt <= low!{
-            return "low"
-        }
-        if watt <= medium!{
-            return "medium"
-        }
-        if watt >= high!{
-            return "high"
+        if let low = IMPACT[cores]?[model]?["low"],
+        let medium = IMPACT[cores]?[model]?["medium"],
+        let high = IMPACT[cores]?[model]?["high"] {
+            if watt <= low{
+                return "low"
+            }
+            if watt <= medium{
+                return "medium"
+            }
+            if watt >= high{
+                return "high"
+            }
         }
         return "mid"
     }
