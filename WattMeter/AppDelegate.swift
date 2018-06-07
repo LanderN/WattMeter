@@ -33,15 +33,15 @@ extension NSColor {
 }
 
 struct Statistics {
-    var voltage: Int
-    var current: Int
+    var voltage: Double
+    var current: Double
     var watts: Int
 }
 
 struct ImpactDefinition {
     var high = 40
     var medium = 20
-    var low = 10
+    var low = 15
 }
 
 enum Impact {
@@ -63,8 +63,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var launchAtLoginItem:NSMenuItem!
 
     func getBatteryStatistics() -> Statistics {
-        var voltage = 0
-        var current = 0
+        var voltage = 0.0
+        var current = 0.0
         
         // Get current and voltage from battery
         var kernResult: kern_return_t?
@@ -80,8 +80,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if count > 0 {
                 let pointer = CFArrayGetValueAtIndex(array, 0)
                 let pmBattery:Dictionary<String, Any> = unsafeBitCast(pointer, to: CFDictionary.self) as! Dictionary
-                voltage = (pmBattery[kIOBatteryVoltageKey] as! Int) / 1000
-                current = (pmBattery[kIOBatteryAmperageKey] as! Int) / 1000
+                voltage = (pmBattery[kIOBatteryVoltageKey] as! Double) / 1000.0
+                current = (pmBattery[kIOBatteryAmperageKey] as! Double) / 1000.0
             }
         }
         
@@ -103,7 +103,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
          }
          */
         
-        let watts = abs(voltage * current)
+        let watts = Int(floor(abs(voltage * current)))
         return Statistics(voltage: voltage, current: current, watts: watts)
     }
     
@@ -179,6 +179,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // TODO: Replace by user preference if desired
         var impact: ImpactDefinition
         switch model {
+        // FIXME: not working for some reason
         case "MacBookPro13,3":
             impact = ImpactDefinition(high:40, medium: 20, low: 15)
             break
@@ -186,6 +187,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         default:
             impact = ImpactDefinition()
         }
+        
+        print(model)
+        print(impact)
         
         // TODO arbitrary amount of impact levels?
         if watt <= impact.low{
@@ -226,15 +230,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.removeAllItems()
         // TODO: add extra info here (Voltage, Amperage)
         if (getPowerSource() == PowerSource.BATTERY) {
+            menu.addItem(NSMenuItem(title: "Using Battery Power", action: nil, keyEquivalent: ""))
             menu.addItem(NSMenuItem(title: "Voltage: " + String(getBatteryStatistics().voltage) + "V", action: nil, keyEquivalent: ""))
             menu.addItem(NSMenuItem(title: "Current: " + String(abs(getBatteryStatistics().current)) + "A", action: nil, keyEquivalent: ""))
+        } else {
+            menu.addItem(NSMenuItem(title: "Using AC Power", action: nil, keyEquivalent: ""))
         }
         launchAtLoginItem = NSMenuItem(title: "Launch at Login", action: #selector(AppDelegate.toggleLaunchAtLogin), keyEquivalent: "")
         if(LaunchAtLogin.isEnabled) {
             launchAtLoginItem.state = NSControl.StateValue.on
         }
-        menu.addItem(launchAtLoginItem)
         menu.addItem(NSMenuItem.separator())
+        menu.addItem(launchAtLoginItem)
         menu.addItem(NSMenuItem(title: "Quit Wattmeter", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
     }
 
