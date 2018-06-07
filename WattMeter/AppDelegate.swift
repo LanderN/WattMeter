@@ -170,7 +170,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let button = statusItem.button {
             iconText += String(watts) + "W"
             button.attributedTitle = NSAttributedString(string: iconText, attributes: iconAttributes)
+            button.action = #selector(self.constructMenu)
         }
+        redrawMenu(menu: statusItem.menu!)
     }
     
     func getImpact(model: String, watt: Int) -> Impact{
@@ -203,8 +205,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         
         updateTimer = Timer.scheduledTimer(timeInterval: 40.0, target: self, selector: #selector(AppDelegate.updateIcon), userInfo: nil, repeats: true)
-        updateIcon()
         constructMenu()
+        updateIcon()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -219,9 +221,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             launchAtLoginItem.state = NSControl.StateValue.off
         }
     }
-
-    func constructMenu() {
-        let menu = NSMenu()
+    
+    @objc func redrawMenu(menu: NSMenu) {
+        menu.removeAllItems()
         // TODO: add extra info here (Voltage, Amperage)
         if (getPowerSource() == PowerSource.BATTERY) {
             menu.addItem(NSMenuItem(title: "Voltage: " + String(getBatteryStatistics().voltage) + "V", action: nil, keyEquivalent: ""))
@@ -234,8 +236,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(launchAtLoginItem)
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit Wattmeter", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
-        
-        statusItem.menu = menu
+    }
+
+    @objc func constructMenu() {
+        statusItem.menu = NSMenu()
+        redrawMenu(menu: statusItem.menu!)
     }
 }
 
