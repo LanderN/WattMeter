@@ -10,7 +10,7 @@ import Cocoa
 import Foundation
 import IOKit.ps
 import IOKit.pwr_mgt
-
+import LaunchAtLogin
 
 // Copied from StackOverflow
 // https://stackoverflow.com/a/24263296
@@ -32,141 +32,176 @@ extension NSColor {
     }
 }
 
+struct Statistics {
+    var voltage: Int
+    var current: Int
+    var watts: Int
+}
+
+struct ImpactDefinition {
+    var high = 40
+    var medium = 20
+    var low = 10
+}
+
+enum Impact {
+    case LOW
+    case NORMAL
+    case MEDIUM
+    case HIGH
+}
+
+enum PowerSource {
+    case AC
+    case BATTERY
+}
+
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     var updateTimer:Timer!
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+    var launchAtLoginItem:NSMenuItem!
 
-    @objc func updateIcon() {
-        var attribute = [:] as [NSAttributedStringKey: Any]
-        var iconText = ""
+    func getBatteryStatistics() -> Statistics {
+        var voltage = 0
+        var current = 0
         
-        var watts = 0
+        // Get current and voltage from battery
+        var kernResult: kern_return_t?
+        let tmp: UnsafeMutablePointer<Unmanaged<CFArray>?> = UnsafeMutablePointer.allocate(capacity: MemoryLayout<Unmanaged<CFArray>?>.size)
+        let masterPort: UnsafeMutablePointer<mach_port_t> = UnsafeMutablePointer.allocate(capacity: MemoryLayout<mach_port_t>.size)
+        kernResult = IOMasterPort(mach_port_t(MACH_PORT_NULL), masterPort)
+        if KERN_SUCCESS != kernResult {
+            print("Something went wrong.")
+        } else {
+            IOPMCopyBatteryInfo(mach_port_t(MACH_PORT_NULL), tmp)
+            let array:CFArray = (tmp.pointee?.takeRetainedValue())!
+            let count = CFArrayGetCount(array)
+            if count > 0 {
+                let pointer = CFArrayGetValueAtIndex(array, 0)
+                let pmBattery:Dictionary<String, Any> = unsafeBitCast(pointer, to: CFDictionary.self) as! Dictionary
+                voltage = (pmBattery[kIOBatteryVoltageKey] as! Int) / 1000
+                current = (pmBattery[kIOBatteryAmperageKey] as! Int) / 1000
+            }
+        }
+        
+        /*
+         // This is a better way to get above info, but unfortunately doesn't work for voltage for some reason
+         let psList = IOPSCopyPowerSourcesList(psInfo).takeRetainedValue() as [CFTypeRef]
+         for ps in psList {
+             let psDesc2 = IOPSGetPowerSourceDescription(psInfo, ps)
+             if let psDesc = IOPSGetPowerSourceDescription(psInfo, ps).takeUnretainedValue() as? [String: Any] {
+                 if let battVoltage = (psDesc[kIOPSVoltageKey] as? Int) {
+                     print("Voltage:", battVoltage)
+                     voltage = battVoltage
+                 }
+                 if let battCurrent = (psDesc[kIOPSCurrentKey] as? Int) {
+                     print("Current:", battCurrent)
+                     current = battCurrent
+                 }
+            }
+         }
+         */
+        
+        let watts = abs(voltage * current)
+        return Statistics(voltage: voltage, current: current, watts: watts)
+    }
+    
+    func getColor(impact: Impact) -> NSColor {
+        // TODO: Replace by user preference
+        switch impact {
+        case Impact.LOW:
+            return NSColor(rgb:0x3D9140)
+        case Impact.NORMAL:
+            return NSColor(rgb:0x7b917b)
+        case Impact.MEDIUM:
+            return NSColor(rgb:0xDD8000)
+        case Impact.HIGH:
+            return NSColor(rgb:0xff0000)
+        }
+    }
+    
+    func getModel() -> String {
+        let service: io_service_t = IOServiceGetMatchingService(kIOMasterPortDefault, IOServiceMatching("IOPlatformExpertDevice"))
+        let cfstr = "model" as CFString
+        if let model = IORegistryEntryCreateCFProperty(service, cfstr, kCFAllocatorDefault, 0).takeUnretainedValue() as? NSData {
+            if let nsstr =  NSString(data: model as Data, encoding: String.Encoding.utf8.rawValue) {
+                return nsstr as String
+            }
+        }
+        return ""
+    }
+    
+    func getPowerSource() -> PowerSource {
         let psInfo = IOPSCopyPowerSourcesInfo().takeRetainedValue()
         let powerSource = IOPSGetProvidingPowerSourceType(psInfo).takeRetainedValue() as String
         if powerSource == kIOPMACPowerKey {
+            return PowerSource.AC
+        } else {
+            return PowerSource.BATTERY
+        }
+    }
+    
+    @objc func updateIcon() {
+        var iconAttributes = [:] as [NSAttributedStringKey: Any]
+        var iconText = ""
+        var watts = 0
+        
+        if getPowerSource() == PowerSource.AC {
             let acInfo = IOPSCopyExternalPowerAdapterDetails().takeRetainedValue() as CFTypeRef
             if let acWatts = (acInfo[kIOPSPowerAdapterWattsKey] as? Int) {
                 watts = acWatts
                 iconText += "⚡️"
             }
-        } else if powerSource == kIOPMBatteryPowerKey {
-            var voltage = 0
-            var current = 0
             
-            // OMG, kill me now
-            var kernResult: kern_return_t?
-            let tmp: UnsafeMutablePointer<Unmanaged<CFArray>?> = UnsafeMutablePointer.allocate(capacity: MemoryLayout<Unmanaged<CFArray>?>.size)
-            let masterPort: UnsafeMutablePointer<mach_port_t> = UnsafeMutablePointer.allocate(capacity: MemoryLayout<mach_port_t>.size)
-            kernResult = IOMasterPort(mach_port_t(MACH_PORT_NULL), masterPort)
-            if KERN_SUCCESS != kernResult {
-                print("Something went wrong.")
-            } else {
-                IOPMCopyBatteryInfo(mach_port_t(MACH_PORT_NULL), tmp)
-                let array:CFArray = (tmp.pointee?.takeRetainedValue())!
-                let count = CFArrayGetCount(array)
-                if count > 0 {
-                    let pointer = CFArrayGetValueAtIndex(array, 0)
-                    let pmBattery:Dictionary<String, Any> = unsafeBitCast(pointer, to: CFDictionary.self) as! Dictionary
-                    voltage = pmBattery[kIOBatteryVoltageKey] as! Int
-                    current = pmBattery[kIOBatteryAmperageKey] as! Int
-                }
-            }
+        } else if getPowerSource() == PowerSource.BATTERY {
+            watts = getBatteryStatistics().watts
+            let impact = getImpact(model: getModel(), watt: watts)
             
-            /*
-            // This is a better way to get above info, but unfortunately doesn't work for voltage for some reason
-            let psList = IOPSCopyPowerSourcesList(psInfo).takeRetainedValue() as [CFTypeRef]
-            for ps in psList {
-                let psDesc2 = IOPSGetPowerSourceDescription(psInfo, ps)
-                if let psDesc = IOPSGetPowerSourceDescription(psInfo, ps).takeUnretainedValue() as? [String: Any] {
-                    if let battVoltage = (psDesc[kIOPSVoltageKey] as? Int) {
-                        print("Voltage:", battVoltage)
-                        voltage = battVoltage
-                    }
-                    if let battCurrent = (psDesc[kIOPSCurrentKey] as? Int) {
-                        print("Current:", battCurrent)
-                        current = battCurrent
-                    }
-                    
-                }
-            }
-            */
-            
-            watts = abs(voltage / 1000 * current / 1000)
-            
-            // TODO: Get more reliable way of selecting model?
-            let model = "MacBook Pro"
-            let cores = 4
-            
-            
-            let impact = get_impact(model: model, cores: cores, watt: watts)
-            var color = NSColor(rgb:0xDD8000)
-            if impact == "low"{
-                color = NSColor(rgb:0x3D9140)
-            }
-            if impact == "medium"{
-                color = NSColor(rgb:0x7b917b)
-            }
-            if impact == "high"{
-                color = NSColor(rgb:0xff0000)
-            }
-            if impact == "high"{
+            if impact == Impact.HIGH {
                 iconText += "⚠ "
             }
             
-            attribute[NSAttributedStringKey.foregroundColor] = color
+            iconAttributes[NSAttributedStringKey.foregroundColor] = getColor(impact: impact)
         }
         
-        attribute[NSAttributedStringKey.font] = NSFont(name: "Helvetica", size: 10)
+        iconAttributes[NSAttributedStringKey.font] = NSFont(name: "Helvetica", size: 10)
         
         if let button = statusItem.button {
             iconText += String(watts) + "W"
-            button.attributedTitle = NSAttributedString(string: iconText, attributes: attribute)
+            button.attributedTitle = NSAttributedString(string: iconText, attributes: iconAttributes)
         }
     }
     
-    func get_impact(model: String, cores: Int, watt: Int) -> String{
-        // TODO: Update this to reflect all available models
-        // TODO: Add fallback for unrecognized Macs
-        // TODO: Make configurable in settings, with reasonable defaults for detected model
-        let IMPACT = [
-            2: [
-                "MacBook Air": [
-                    "high": 20,
-                    "low": 10
-                ],
-                "MacBook Pro": [
-                    "high": 50,
-                    "low": 20
-                ]
-            ],
-            4: [
-                "MacBook Pro": [
-                    "high": 40,
-                    "medium": 20,
-                    "low": 15
-                ]
-            ]
-        ]
-        
-        // TODO: Clean up this mess
-        if let low = IMPACT[cores]?[model]?["low"],
-        let medium = IMPACT[cores]?[model]?["medium"],
-        let high = IMPACT[cores]?[model]?["high"] {
-            if watt <= low{
-                return "low"
-            }
-            if watt <= medium{
-                return "medium"
-            }
-            if watt >= high{
-                return "high"
-            }
+    func getImpact(model: String, watt: Int) -> Impact{
+        // TODO: Replace by user preference if desired
+        var impact: ImpactDefinition
+        switch model {
+        case "MacBookPro13,3":
+            impact = ImpactDefinition(high:40, medium: 20, low: 15)
+            break
+        // TODO: Add more model definitions
+        default:
+            impact = ImpactDefinition()
         }
-        return "mid"
+        
+        // TODO arbitrary amount of impact levels?
+        if watt <= impact.low{
+            return Impact.LOW
+        }
+        if watt >= impact.medium{
+            return Impact.MEDIUM
+        }
+        if watt >= impact.high{
+            return Impact.HIGH
+        }
+        
+        return Impact.NORMAL
+        
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        
         updateTimer = Timer.scheduledTimer(timeInterval: 40.0, target: self, selector: #selector(AppDelegate.updateIcon), userInfo: nil, repeats: true)
         updateIcon()
         constructMenu()
@@ -175,10 +210,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
     }
+    
+    @objc func toggleLaunchAtLogin() {
+        LaunchAtLogin.isEnabled = !LaunchAtLogin.isEnabled
+        if(LaunchAtLogin.isEnabled) {
+            launchAtLoginItem.state = NSControl.StateValue.on
+        } else {
+            launchAtLoginItem.state = NSControl.StateValue.off
+        }
+    }
 
     func constructMenu() {
         let menu = NSMenu()
         // TODO: add extra info here (Voltage, Amperage)
+        if (getPowerSource() == PowerSource.BATTERY) {
+            menu.addItem(NSMenuItem(title: "Voltage: " + String(getBatteryStatistics().voltage) + "V", action: nil, keyEquivalent: ""))
+            menu.addItem(NSMenuItem(title: "Current: " + String(abs(getBatteryStatistics().current)) + "A", action: nil, keyEquivalent: ""))
+        }
+        launchAtLoginItem = NSMenuItem(title: "Launch at Login", action: #selector(AppDelegate.toggleLaunchAtLogin), keyEquivalent: "")
+        if(LaunchAtLogin.isEnabled) {
+            launchAtLoginItem.state = NSControl.StateValue.on
+        }
+        menu.addItem(launchAtLoginItem)
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit Wattmeter", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         
