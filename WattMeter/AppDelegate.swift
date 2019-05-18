@@ -40,15 +40,15 @@ struct Statistics {
 
 struct ImpactDefinition {
     var high = 40
-    var medium = 20
+    var normal = 20
     var low = 15
 }
 
 enum Impact {
     case LOW
     case NORMAL
-    case MEDIUM
     case HIGH
+    case VERY_HIGH
 }
 
 enum PowerSource {
@@ -85,24 +85,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
         
-        /*
-         // This is a better way to get above info, but unfortunately doesn't work for voltage for some reason
-         let psList = IOPSCopyPowerSourcesList(psInfo).takeRetainedValue() as [CFTypeRef]
-         for ps in psList {
-             let psDesc2 = IOPSGetPowerSourceDescription(psInfo, ps)
-             if let psDesc = IOPSGetPowerSourceDescription(psInfo, ps).takeUnretainedValue() as? [String: Any] {
-                 if let battVoltage = (psDesc[kIOPSVoltageKey] as? Int) {
-                     print("Voltage:", battVoltage)
-                     voltage = battVoltage
-                 }
-                 if let battCurrent = (psDesc[kIOPSCurrentKey] as? Int) {
-                     print("Current:", battCurrent)
-                     current = battCurrent
-                 }
-            }
-         }
-         */
-        
         let watts = Int(floor(abs(voltage * current)))
         return Statistics(voltage: voltage, current: current, watts: watts)
     }
@@ -114,9 +96,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return NSColor(rgb:0x3D9140)
         case Impact.NORMAL:
             return NSColor(rgb:0x7b917b)
-        case Impact.MEDIUM:
-            return NSColor(rgb:0xDD8000)
         case Impact.HIGH:
+            return NSColor(rgb:0xDD8000)
+        case Impact.VERY_HIGH:
             return NSColor(rgb:0xff0000)
         }
     }
@@ -158,7 +140,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             watts = getBatteryStatistics().watts
             let impact = getImpact(model: getModel(), watt: watts)
             
-            if impact == Impact.HIGH {
+            if impact == Impact.VERY_HIGH {
                 iconText += "⚠ "
             }
             
@@ -178,31 +160,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func getImpact(model: String, watt: Int) -> Impact{
         // TODO: Replace by user preference if desired
         var impact: ImpactDefinition
-        switch model {
-        // FIXME: not working for some reason
-        case "MacBookPro13,3":
-            impact = ImpactDefinition(high:40, medium: 20, low: 15)
-            break
-        // TODO: Add more model definitions
-        default:
+        if model.contains("MacBookPro13,3") {
+            impact = ImpactDefinition(high:40, normal: 20, low: 15)
+            // TODO: Add more model definitions
+        } else {
             impact = ImpactDefinition()
         }
         
-        print(model)
-        print(impact)
-        
-        // TODO arbitrary amount of impact levels?
         if watt <= impact.low{
             return Impact.LOW
         }
-        if watt >= impact.medium{
-            return Impact.MEDIUM
+        if watt <= impact.normal{
+            return Impact.NORMAL
         }
-        if watt >= impact.high{
+        if watt <= impact.high{
             return Impact.HIGH
         }
+        return Impact.VERY_HIGH
         
-        return Impact.NORMAL
         
     }
     
@@ -228,7 +203,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @objc func redrawMenu(menu: NSMenu) {
         menu.removeAllItems()
-        // TODO: add extra info here (Voltage, Amperage)
         if (getPowerSource() == PowerSource.BATTERY) {
             menu.addItem(NSMenuItem(title: "Using Battery Power", action: nil, keyEquivalent: ""))
             menu.addItem(NSMenuItem(title: "Voltage: " + String(getBatteryStatistics().voltage) + "V", action: nil, keyEquivalent: ""))
